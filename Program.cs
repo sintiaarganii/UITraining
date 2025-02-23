@@ -1,6 +1,25 @@
+using Microsoft.EntityFrameworkCore;
+using UITraining.Interfaces;
+using UITraining.Models;
+using UITraining.Services;
+
 var builder = WebApplication.CreateBuilder(args);
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 29));
 
 // Add services to the container.
+builder.Services.AddDbContext<ApplicationContext>(
+    dbContextOptions => dbContextOptions
+        .UseMySql(builder.Configuration.GetConnectionString("MyConnectionStrings"), serverVersion)
+        // The following three options help with debugging, but should
+        // be changed or removed for production.
+        .LogTo(Console.WriteLine, LogLevel.Information)
+        .EnableSensitiveDataLogging()
+        .EnableDetailedErrors()
+);
+
+builder.Services.AddScoped<IProduct, ProductServices>();
+
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -22,6 +41,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
 
 app.Run();
