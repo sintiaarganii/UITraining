@@ -49,5 +49,18 @@ namespace UITraining.Services
             _context.SaveChanges();
             return true;
         }
+
+        public bool DeletedProduct(int productId)
+        {
+            var product = _context.Products.FirstOrDefault(x => x.Id == productId);
+            if (product != null && product.Status != ProductStatus.deleted)
+            {
+                product.Status = ProductStatus.deleted; // Ubah status saja
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
     }
 }
