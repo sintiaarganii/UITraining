@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UITraining.Interfaces;
 using UITraining.Models.DB;
+using UITraining.Services;
 
 namespace UITraining.Controllers
 {
@@ -35,5 +36,16 @@ namespace UITraining.Controllers
             }
             return View();
         }
+
+        public IActionResult Delete(int Id)
+        {
+            var deleteProduct = _interface.DeletedProduct(Id);
+            if (deleteProduct)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return BadRequest("Cannot Deleted this product");
+        }
+
     }
 }
