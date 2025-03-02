@@ -1,8 +1,9 @@
-﻿using static UITraining.Models.GeneralStatus;
+﻿using UITraining.Models.DB;
+using static UITraining.Models.GeneralStatus;
 
-namespace UITraining.Models.DB
+namespace UITraining.Models.DTO
 {
-    public class Product
+    public class ProductDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -10,7 +11,7 @@ namespace UITraining.Models.DB
         public int Price { get; set; }
         public int Stock { get; set; }
         public GeneralStatusData Status { get; set; }
-        public int IdSupplier {  get; set; }
-        public Supplier supplier { get; set; }
+        public string SupplierName { get; set; }
+        public int IdSupplier { get; set; }
     }
 }

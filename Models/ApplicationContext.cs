@@ -11,5 +11,16 @@ namespace UITraining.Models
         }
 
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Supplier> Suppliers { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.supplier)
+                .WithMany(s => s.products)
+                .HasForeignKey(p => p.IdSupplier);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

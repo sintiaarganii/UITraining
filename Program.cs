@@ -17,7 +17,8 @@ builder.Services.AddDbContext<ApplicationContext>(
         .EnableDetailedErrors()
 );
 
-builder.Services.AddScoped<IProduct, ProductServices>();
+builder.Services.AddScoped<IProduct, ProductServices>(); //
+builder.Services.AddScoped<ISupplier, SupplierServices>(); //
 
 
 builder.Services.AddControllersWithViews();

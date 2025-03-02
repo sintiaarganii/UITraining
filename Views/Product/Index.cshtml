@@ -1,5 +1,5 @@
-﻿@using UITraining.Models.DB
-@model List<Product>
+﻿@using UITraining.Models.DTO
+@model List<ProductDTO>
 
 @{
     ViewData["Title"] = "Product";
@@ -23,6 +23,7 @@
             <div class="col-lg-12">
 
                 <div class="card">
+                    <a href="@Url.Action("Edit", "Product")" class="btn btn-sm btn-info">Add Product</a>
                     <div class="card-body">
                         <h5 class="card-title">Products</h5>
 
@@ -34,6 +35,7 @@
                                     <th>Stock</th>
                                     <th>Description</th>
                                     <th>Price</th>
+                                    <th>Supplier</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -47,6 +49,7 @@
                                         <td>@data.Stock</td>
                                         <td>@data.Description</td>
                                         <td>@data.Price</td>
+                                        <td>@data.SupplierName</td>
                                         <td>@data.Status</td>
                                         <td class="d-flex gap-2">
                                             <a href="@Url.Action("Edit", "Product", new { id = data.Id })" class="btn btn-sm btn-info">Edit</a>

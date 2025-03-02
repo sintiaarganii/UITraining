@@ -1,6 +1,9 @@
-﻿using UITraining.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using UITraining.Interfaces;
 using UITraining.Models;
 using UITraining.Models.DB;
+using UITraining.Models.DTO;
+using static UITraining.Models.GeneralStatus;
 
 namespace UITraining.Services
 {
@@ -13,15 +16,27 @@ namespace UITraining.Services
             _context = context;
         }
 
-        public List<Product> GetAllProducts()
+        public List<ProductDTO> GetAllProducts()
         {
-            var products = _context.Products.Where(x => x.Status != ProductStatus.deleted).ToList();
+            var products = _context.Products
+                .Include(y=>y.supplier)
+                .Where(x=>x.Status != GeneralStatusData.deleted)
+                .Select(x=> new ProductDTO
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    Price = x.Price,
+                    Stock = x.Stock,
+                    Status = x.Status,
+                    SupplierName = x.supplier.SupplierName,
+                }).ToList();
             return products;
         }
 
         public Product GetProductById(int id)
         {
-            var product = _context.Products.Where(x => x.Id == id && x.Status != ProductStatus.deleted).FirstOrDefault();
+            var product = _context.Products.Where(x => x.Id == id && x.Status != GeneralStatusData.deleted).FirstOrDefault();
 
             if (product == null)
             {
@@ -30,8 +45,21 @@ namespace UITraining.Services
 
             return product;
         }
+        public bool AddProduct(ProductDTO product)
+        {
+            var data = new Product();
+            data.Name = product.Name;
+            data.Description = product.Description;
+            data.Stock = product.Stock;
+            data.Price = product.Price;
+            data.Status = product.Status;
+            data.IdSupplier = product.IdSupplier;
 
-        public bool EditProduct(Product product)
+            _context.Add(data);
+            _context.SaveChanges();
+            return true;
+        }
+        public bool EditProduct(ProductDTO product)
         {
             var data = _context.Products.FirstOrDefault(x => x.Id == product.Id);
             if (data == null)
@@ -43,8 +71,8 @@ namespace UITraining.Services
             data.Stock = product.Stock;
             data.Description = product.Description;
             data.Price = product.Price;
-            data.Status = product.Status;
-
+            //data.Status = product.Status;
+            //data.supplier = product.SupplierName;
             _context.Products.Update(data);
             _context.SaveChanges();
             return true;
@@ -53,9 +81,9 @@ namespace UITraining.Services
         public bool DeletedProduct(int productId)
         {
             var product = _context.Products.FirstOrDefault(x => x.Id == productId);
-            if (product != null && product.Status != ProductStatus.deleted)
+            if (product != null && product.Status != GeneralStatusData.deleted)
             {
-                product.Status = ProductStatus.deleted; // Ubah status saja
+                product.Status = GeneralStatusData.deleted; 
                 _context.SaveChanges();
                 return true;
             }
