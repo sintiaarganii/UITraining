@@ -1,5 +1,66 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using UITraining.Models.DTO
+@model List<SupplierDTO>
+
 @{
+    ViewData["Title"] = "Supplier";
 }
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Supplier List</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item">Tables</li>
+                <li class="breadcrumb-item active">Data</li>
+            </ol>
+        </nav>
+    </div>
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div class="card">
+                    <a href="@Url.Action("EditSupplier", "Supplier")" class="btn btn-sm btn-info">Add Supplier</a>
+                    <div class="card-body">
+                        <h5 class="card-title">Supplier</h5>
+
+                        <table class="table datatable">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>SupplierName</th>
+                                    <th>SupplierAddress</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var dataSup in Model)
+                                {
+                                    <tr>
+                                        <td>@dataSup.Id</td>
+                                        <td>@dataSup.SupplierName</td>
+                                        <td>@dataSup.SupplierAddress</td>
+                                        <td>@dataSup.StatusData</td>
+
+                                        <td class="d-flex gap-2">
+                                            <a href="@Url.Action("EditSupplier", "Supplier", new { id = dataSup.Id })" class="btn btn-sm btn-info">Edit</a>
+                                            <a href="@Url.Action("Delete", "Supplier", new { id = dataSup.Id })" class="btn btn-sm btn-danger"
+                                               onclick="return confirm('are u sure want to deleted supplier?');">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</main>

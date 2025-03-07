@@ -6,6 +6,8 @@
         {
             published,
             unpublished,
+            active,
+            inActive,
             deleted
         }
     }
