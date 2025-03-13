@@ -1,5 +1,6 @@
 ﻿@using UITraining.Models.DTO
 @model UserAccessDTO
+
 @{
     Layout = null;
 }
@@ -18,6 +19,21 @@
     <!-- Favicons -->
     <link href="~/assets/img/favicon.png" rel="icon">
     <link href="~/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <style>
+        .input-group button {
+            border: 1px solid #ced4da;
+            border-left: none; /* Hilangkan border kiri */
+            background-color: #fff;
+        }
+
+            .input-group button:hover {
+                background-color: #f8f9fa;
+            }
+
+            .input-group button i {
+                font-size: 1.2rem;
+            }
+    </style>
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -69,7 +85,6 @@
                                         <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
                                         <p class="text-center small">Enter your personal details to create account</p>
                                     </div>
-
                                     <form class="row g-3 needs-validation" asp-controller="UserAccess" asp-action="RegisterUser" method="post" novalidate>
                                         <div class="col-12">
                                             <label for="yourName" class="form-label">Name</label>
@@ -83,25 +98,56 @@
                                             <div class="invalid-feedback">Please input a username.</div>
                                         </div>
 
+                                        @* <div class="col-12"> *@
+                                        @*     <label for="yourPassword" class="form-label">Password</label> *@
+                                        @*     <input type="password" asp-for="Password" class="form-control" id="yourPassword" required> *@
+                                        @*     <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('yourPassword')"> *@
+                                        @*         <i class="bi bi-eye"></i> <!-- Ikon mata --> *@
+                                        @*     </button> *@
+                                        @*     <span class="text-danger" asp-validation-for="Password"></span> *@
+
+                                        @* </div> *@
+
+                                        @* <div class="col-12"> *@
+                                        @*     <label for="yourMatchPassword" class="form-label">MatchPassword</label> *@
+                                        @*     <input type="password" asp-for="MatchPassword" class="form-control" id="yourMatchPassword" required> *@
+                                        @*     <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('yourPassword')"> *@
+                                        @*         <i class="bi bi-eye"></i> <!-- Ikon mata --> *@
+                                        @*     </button> *@
+                                        @*     <span class="text-danger" asp-validation-for="MatchPassword"></span> *@
+
+                                        @* </div> *@
+
                                         <div class="col-12">
                                             <label for="yourPassword" class="form-label">Password</label>
-                                            <input type="password" asp-for="Password" name="password" class="form-control" id="yourPassword" required>
-                                            <div class="invalid-feedback">Please enter your password!</div>
+                                            <div class="input-group">
+                                                <input type="password" asp-for="Password" class="form-control" id="yourPassword" required>
+                                                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('yourPassword')">
+                                                    <i class="bi bi-eye"></i> <!-- Ikon mata -->
+                                                </button>
+                                            </div>
+                                            <span class="text-danger" asp-validation-for="Password"></span>
                                         </div>
 
                                         <div class="col-12">
-                                            <label for="yourMatchPassword" class="form-label">Re-entar Password</label>
-                                            <input type="password" asp-for="MatchPassword" name="password" class="form-control" id="yourMatchPassword" required>
-                                            <div class="invalid-feedback">Please re-enter your password!</div>
+                                            <label for="yourMatchPassword" class="form-label">MatchPassword</label>
+                                            <div class="input-group">
+                                                <input type="password" asp-for="MatchPassword" class="form-control" id="yourMatchPassword" required>
+                                                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('yourMatchPassword')">
+                                                    <i class="bi bi-eye"></i> <!-- Ikon mata -->
+                                                </button>
+                                            </div>
+                                            <span class="text-danger" asp-validation-for="MatchPassword"></span>
                                         </div>
 
                                         <div class="col-12">
                                             <button class="btn btn-primary w-100" type="submit">Create Account</button>
                                         </div>
                                         <div class="col-12">
-                                            <p class="small mb-0">Already have an account? <a href="pages-login.html">Log in</a></p>
+                                            <p class="small mb-0">Already have an account? <a href="/UserAccess/Login">Log in</a></p>
                                         </div>
                                     </form>
+
 
                                 </div>
                             </div>
@@ -137,6 +183,40 @@
 
     <!-- Template Main JS File -->
     <script src="~/assets/js/main.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Cek apakah ada pesan error
+            const errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage) {
+                alert(errorMessage); // Tampilkan alert error
+            }
+
+            // Cek apakah ada pesan sukses
+            const successMessage = '@TempData["SuccessMessage"]';
+            if (successMessage) {
+                alert(successMessage); // Tampilkan alert sukses
+            }
+        });
+    </script>
+
+    <script>
+        function togglePassword(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleButton = passwordInput.nextElementSibling.querySelector('i');
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleButton.classList.remove("bi-eye");
+                toggleButton.classList.add("bi-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                toggleButton.classList.remove("bi-eye-slash");
+                toggleButton.classList.add("bi-eye");
+            }
+        }
+    </script>
+
 
 </body>
 

@@ -24,13 +24,30 @@ namespace UITraining.Services
                 Username = users.Username,
                 Password = users.Password,
                 AccessDate = DateTime.Now,
-                UserStatus = GeneralStatus.GeneralStatusData.published
+                UsersStatus = GeneralStatus.GeneralStatusData.published
             };
 
             _context.UserAccesses.Add(user);
             _context.SaveChanges();
             return true;
         }
+
+
+        public bool ValidateLogin(string username, string password)
+        {
+            var user = _context.UserAccesses
+                .FirstOrDefault(x => x.Username == username && x.Password == password && x.UsersStatus != GeneralStatusData.delete);
+            if (user != null)
+            {
+                user.AccessDate = DateTime.Now;
+                _context.SaveChanges();
+                return true;
+            }
+
+            return false;
+        }
+
+
 
         //public List<UserAccessDTO> GetAllUser()
         //{
@@ -90,14 +107,14 @@ namespace UITraining.Services
 
         public List<UserAccessDTO> GetlistUser()
         {
-            var data = _context.UserAccesses.Where(x => x.UserStatus != GeneralStatusData.deleted).Select(x => new UserAccessDTO
+            var data = _context.UserAccesses.Where(x => x.UsersStatus != GeneralStatusData.deleted).Select(x => new UserAccessDTO
             {
                 Id = x.Id,
                 Name = x.Name,
                 Username = x.Username,
                 Password = x.Password,
                 MatchPassword = x.Password,
-                StatusUser = x.UserStatus
+                UsersStatus = x.UsersStatus
 
             }).ToList();
             return data;
@@ -106,7 +123,7 @@ namespace UITraining.Services
 
         public UserAccess GetUserById(int id)
         {
-            var data = _context.UserAccesses.Where(x => x.Id == id && x.UserStatus != GeneralStatusData.deleted).FirstOrDefault();
+            var data = _context.UserAccesses.Where(x => x.Id == id && x.UsersStatus != GeneralStatusData.deleted).FirstOrDefault();
             if (data == null)
             {
                 return new UserAccess();
@@ -124,7 +141,7 @@ namespace UITraining.Services
             }
 
 
-            data.UserStatus = userAccessDTO.StatusUser;
+            data.UsersStatus = userAccessDTO.UsersStatus;
 
 
             _context.UserAccesses.Update(data);
@@ -143,7 +160,7 @@ namespace UITraining.Services
                 return false;
             }
 
-            data.UserStatus = GeneralStatusData.deleted;
+            data.UsersStatus = GeneralStatusData.deleted;
             //_context.Products.Update(data);
             _context.SaveChanges();
             return true;

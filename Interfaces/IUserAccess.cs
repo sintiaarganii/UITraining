@@ -10,5 +10,7 @@ namespace UITraining.Interfaces
         public UserAccess GetUserById(int id);
         public bool EditUser(UserAccessDTO userAccessDTO);
         public bool DeleteUser(int id);
+        public bool ValidateLogin(string username, string password);
+
     }
 }

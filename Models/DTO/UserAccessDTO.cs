@@ -9,6 +9,6 @@ namespace UITraining.Models.DTO
         public string Username { get; set; }
         public string Password { get; set; }
         public string MatchPassword { get; set; }
-        public GeneralStatusData StatusUser { get; set; }
+        public GeneralStatusData UsersStatus { get; set; }
     }
 }

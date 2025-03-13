@@ -41,7 +41,7 @@
                                     <th>Username</th>
                                     <th>Password</th>
                                     <th>MatchPassword</th>
-                                    <th>Status</th>
+                                    <th>Status 2</th>
                                     <th>Action</th>
                                     @* <th data-type="date" data-format="YYYY/DD/MM">Start Date</th> *@
                                 </tr>
@@ -55,7 +55,7 @@
                                         <td>@data.Username</td>
                                         <td>@data.Password</td>
                                         <td>@data.MatchPassword</td>
-                                        <td>@data.StatusUser</td>
+                                        <td>@data.UsersStatus</td>
                                         <td>
                                             <!-- Action buttons column -->
                                             <a href="@Url.Action("Edit", "UserAccess", new { id = data.Id })" class="btn btn-sm btn-info">Update</a>
