@@ -33,7 +33,7 @@ namespace UITraining.Services
         }
         public List<SelectListItem> Suppliers()
         {
-            var datas = _context.Suppliers.Where(x => x.StatusData == GeneralStatusData.active)
+            var datas = _context.Suppliers.Where(x => x.StatusData == GeneralStatusData.published)
                 .Select(x => new SelectListItem
                 {
                     Text = x.SupplierName,

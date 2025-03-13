@@ -28,10 +28,10 @@
 
                         <!-- Horizontal Form -->
                         <form asp-controller="Product" asp-action="Edit" method="post">
-                            <div class="row mb-3">
-                                <label for="Id" class="col-sm-2 col-form-label">Id</label>
+                            <div class="row mb-3 d-none">
+                                <label for="id" class="col-sm-2 col-form-label">Id</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="id" asp-for="Id" hidden>
+                                    <input type="hidden" id="id" asp-for="Id">
                                 </div>
                             </div>
                             <div class="row mb-3">

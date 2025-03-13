@@ -6,7 +6,6 @@ using UITraining.Services;
 var builder = WebApplication.CreateBuilder(args);
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 29));
 
-// Add services to the container.
 builder.Services.AddDbContext<ApplicationContext>(
     dbContextOptions => dbContextOptions
         .UseMySql(builder.Configuration.GetConnectionString("MyConnectionStrings"), serverVersion)
@@ -17,8 +16,10 @@ builder.Services.AddDbContext<ApplicationContext>(
         .EnableDetailedErrors()
 );
 
-builder.Services.AddScoped<IProduct, ProductServices>(); //
-builder.Services.AddScoped<ISupplier, SupplierServices>(); //
+builder.Services.AddScoped<IProduct, ProductServices>(); 
+builder.Services.AddScoped<ISupplier, SupplierServices>(); 
+builder.Services.AddScoped<IUserAccess, UserAccessServices>(); 
+
 
 
 builder.Services.AddControllersWithViews();
