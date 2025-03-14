@@ -98,26 +98,6 @@
                                             <div class="invalid-feedback">Please input a username.</div>
                                         </div>
 
-                                        @* <div class="col-12"> *@
-                                        @*     <label for="yourPassword" class="form-label">Password</label> *@
-                                        @*     <input type="password" asp-for="Password" class="form-control" id="yourPassword" required> *@
-                                        @*     <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('yourPassword')"> *@
-                                        @*         <i class="bi bi-eye"></i> <!-- Ikon mata --> *@
-                                        @*     </button> *@
-                                        @*     <span class="text-danger" asp-validation-for="Password"></span> *@
-
-                                        @* </div> *@
-
-                                        @* <div class="col-12"> *@
-                                        @*     <label for="yourMatchPassword" class="form-label">MatchPassword</label> *@
-                                        @*     <input type="password" asp-for="MatchPassword" class="form-control" id="yourMatchPassword" required> *@
-                                        @*     <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('yourPassword')"> *@
-                                        @*         <i class="bi bi-eye"></i> <!-- Ikon mata --> *@
-                                        @*     </button> *@
-                                        @*     <span class="text-danger" asp-validation-for="MatchPassword"></span> *@
-
-                                        @* </div> *@
-
                                         <div class="col-12">
                                             <label for="yourPassword" class="form-label">Password</label>
                                             <div class="input-group">
@@ -186,16 +166,14 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Cek apakah ada pesan error
             const errorMessage = '@TempData["ErrorMessage"]';
             if (errorMessage) {
-                alert(errorMessage); // Tampilkan alert error
+                alert(errorMessage); 
             }
 
-            // Cek apakah ada pesan sukses
             const successMessage = '@TempData["SuccessMessage"]';
             if (successMessage) {
-                alert(successMessage); // Tampilkan alert sukses
+                alert(successMessage); 
             }
         });
     </script>

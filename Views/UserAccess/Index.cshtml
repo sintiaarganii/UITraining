@@ -1,5 +1,4 @@
-﻿@* INI CODINGAN BRU DITAMBAHKAN PADA TGL 23*@
-@using UITraining.Models.DB
+﻿@using UITraining.Models.DB
 @using UITraining.Models.DTO
 @model List<UserAccessDTO>
 
@@ -33,7 +32,6 @@
                         <!-- Table with stripped rows -->
                         <table class="table datatable">
                             <thead>
-                                @* ================ INI YANG DIUBAH TGl 23 ======================*@
                                 <tr>
                                     <th>
                                         <b>N</b>ame
@@ -43,11 +41,9 @@
                                     <th>MatchPassword</th>
                                     <th>Status 2</th>
                                     <th>Action</th>
-                                    @* <th data-type="date" data-format="YYYY/DD/MM">Start Date</th> *@
                                 </tr>
                             </thead>
                             <tbody>
-                                @* ================ INI YANG DIUBAH TGL 23 ======================*@
                                 @foreach (var data in Model)
                                 {
                                     <tr>
@@ -61,11 +57,10 @@
                                             <a href="@Url.Action("Edit", "UserAccess", new { id = data.Id })" class="btn btn-sm btn-info">Update</a>
                                             <form method="post" action="@Url.Action("Delete", "UserAccess")" style="display:inline">
                                                 <input type="hidden" name="id" value="@data.Id" />
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?');">Delete</button>
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('are u sure want to deleted this user?');">Delete</button>
                                             </form>
-                                            @* <a href="@Url.Action("Delete", "Product", new { id = data.Id })" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">Delete</a> *@
                                         </td>
-                                    </tr>
+                                    </tr> 
                                 }
                             </tbody>
                         </table>

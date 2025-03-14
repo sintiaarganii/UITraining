@@ -11,8 +11,9 @@ namespace UITraining.Controllers
     {
         private readonly IUserAccess _users;
         private readonly ApplicationContext _context;
-        public UserAccessController( IUserAccess users)
+        public UserAccessController( IUserAccess users, ApplicationContext context)
         {
+            _context = context;
             _users = users;
         }
 
@@ -57,35 +58,26 @@ namespace UITraining.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
-            return BadRequest("Gagal menghapus User.");
+            return BadRequest("Cannot Deleted this User.");
         }
-
-
-
-
-
-
-
-
-
 
         [HttpPost]
         public IActionResult Login(UserAccessDTO loginDTO)
         {
             try
             {
-                var datauser = _users.ValidateLogin(loginDTO.Username, loginDTO.Password);
+                var datauser = _users.Login(loginDTO.Username, loginDTO.Password);
                 if (datauser)
                 {
                     return RedirectToAction("Index", "Dashboard");
                 }
 
-                TempData["ErrorMessage"] = "Username atau Password salah!";
+                TempData["ErrorMessage"] = "Username or Password is incorrect!";
                 return View(loginDTO);
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Terjadi kesalahan saat login.";
+                TempData["ErrorMessage"] = "An error occurred while logging in.";
                 return View(loginDTO);
             }
         }
@@ -95,13 +87,13 @@ namespace UITraining.Controllers
         {
             if (userAccessDTO.Password.Length < 7)
             {
-                TempData["ErrorMessage"] = "Password minimal 7 karakter";
+                TempData["ErrorMessage"] = "Password min 7 character";
                 return View(userAccessDTO);
             }
 
             if (userAccessDTO.Password != userAccessDTO.MatchPassword)
             {
-                TempData["ErrorMessage"] = "Password dan Konfirmasi Password harus sama!";
+                TempData["ErrorMessage"] = "Password and Confirm Password must be the same!";
                 return View(userAccessDTO);
             }
 
@@ -109,7 +101,7 @@ namespace UITraining.Controllers
                 .FirstOrDefault(x => x.Username == userAccessDTO.Username);
             if (data != null)
             {
-                TempData["ErrorMessage"] = "Username sudah digunakan. Silakan pilih username lain.";
+                TempData["ErrorMessage"] = "Username is already in use. Please choose another username.";
                 return View(userAccessDTO);
             }
 
@@ -118,28 +110,18 @@ namespace UITraining.Controllers
                 var datauser = _users.AddUser(userAccessDTO);
                 if (datauser)
                 {
-                    TempData["SuccessMessage"] = "Registrasi berhasil! Silakan login."; // Pesan sukses
-                    return RedirectToAction("Login", "UserAccess"); // Redirect jika berhasil
+                    TempData["SuccessMessage"] = "Registration successful! Please login.";
+                    return RedirectToAction("Login", "UserAccess"); 
                 }
 
-                TempData["ErrorMessage"] = "Gagal mendaftarkan user. Silakan coba lagi.";
+                TempData["ErrorMessage"] = "Failed to register user. Please try again.";
                 return View(userAccessDTO);
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Terjadi kesalahan saat mendaftarkan user.";
+                TempData["ErrorMessage"] = "An error occurred while registering the user.";
                 return View(userAccessDTO);
             }
         }
-
-
-
-
-
-
-
-
-
-
     }
 }
