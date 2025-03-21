@@ -71,6 +71,7 @@ namespace UITraining.Services
             data.Stock = product.Stock;
             data.Description = product.Description;
             data.Price = product.Price;
+            data.Status = product.Status;
 
             _context.Products.Update(data);
             _context.SaveChanges();

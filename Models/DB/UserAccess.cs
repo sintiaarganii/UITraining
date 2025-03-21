@@ -7,7 +7,8 @@ namespace UITraining.Models.DB
         public int Id { get; set; }
         public string Name { get; set; }
         public string Username { get; set; }
-        public string Password { get; set; }
+        public string salt { get; set; }
+        public string pwd_hash { get; set; }
         public DateTime AccessDate { get; set; }
 
         public GeneralStatusData UsersStatus { get; set; }

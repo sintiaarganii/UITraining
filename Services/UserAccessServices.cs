@@ -2,31 +2,40 @@
 using UITraining.Models.DB;
 using UITraining.Models.DTO;
 using UITraining.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using static UITraining.Models.GeneralStatus;
+using UITraining.Helper;
 
 namespace UITraining.Services
 {
     public class UserAccessServices : IUserAccess
     {
         private readonly ApplicationContext _context;
-
-        public UserAccessServices(ApplicationContext context)
+        private readonly string _pepper;
+        private readonly string _interation;
+        public UserAccessServices(ApplicationContext context, IConfiguration configuration)
         {
+            _pepper = configuration.GetSection("Security:Pepper").Value ?? "";
+            _interation = configuration.GetSection("Security:Interation").Value ?? "";
             _context = context;
         }
 
         public bool AddUser(UserAccessDTO users)
         {
+            var UserExist = _context.UserAccesses.Where(x => x.Username == users.Username).FirstOrDefault();
+            if (UserExist != null) return false;
+
+            var generateSalt = Helper.Hasher.GenerateSalt();
+
             var user = new UserAccess
             {
                 Name = users.Name,
                 Username = users.Username,
-                Password = users.Password,
                 AccessDate = DateTime.Now,
-                UsersStatus = GeneralStatus.GeneralStatusData.published
+                salt = generateSalt,
+                UsersStatus = GeneralStatus.GeneralStatusData.published,
+                pwd_hash = Hasher.ComputeHash(users.Password, generateSalt, _pepper, Convert.ToInt32(_interation))
             };
-
+           
             _context.UserAccesses.Add(user);
             _context.SaveChanges();
             return true;
@@ -34,15 +43,12 @@ namespace UITraining.Services
 
         public bool Login(string username, string password)
         {
-            var user = _context.UserAccesses
-                .FirstOrDefault(x => x.Username == username && x.Password == password && x.UsersStatus != GeneralStatusData.deleted);
-            if (user != null)
-            {
-                user.AccessDate = DateTime.Now;
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
+            var data = _context.UserAccesses.FirstOrDefault(x => x.Username == username && x.UsersStatus == GeneralStatus.GeneralStatusData.published);
+            if (data == null) return false;
+
+            var hashResult = Hasher.ComputeHash(password, data.salt, _pepper, Convert.ToInt32(_interation));
+
+            return hashResult == data.pwd_hash;
         }
 
         public List<UserAccessDTO> GetlistUser()
@@ -52,8 +58,8 @@ namespace UITraining.Services
                 Id = x.Id,
                 Name = x.Name,
                 Username = x.Username,
-                Password = x.Password,
-                MatchPassword = x.Password,
+                Password = "********", 
+                MatchPassword = "********",
                 UsersStatus = x.UsersStatus
 
             }).ToList();
@@ -62,13 +68,7 @@ namespace UITraining.Services
 
         public UserAccess GetUserById(int id)
         {
-            var data = _context.UserAccesses.Where(x => x.Id == id && x.UsersStatus != GeneralStatusData.deleted).FirstOrDefault();
-            if (data == null)
-            {
-                return new UserAccess();
-            }
-
-            return data;
+            return _context.UserAccesses.FirstOrDefault(x => x.Id == id && x.UsersStatus != GeneralStatusData.deleted) ?? new UserAccess();
         }
 
         public bool EditUser(UserAccessDTO userAccessDTO)
